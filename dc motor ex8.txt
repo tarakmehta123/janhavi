@@ -1,0 +1,45 @@
+//Batch:-C2
+//Name:- Pratik yadav
+//Roll no:- 213030
+//PRN no:- 22310856
+//EXPT- 8 AVR + Motor driver interfacing
+
+#define F_CPU 16000000UL
+#include <avr/io.h>
+#include <util/delay.h>
+
+void motorControl()
+{
+ int i=0;
+ OCR0=0;
+ _delay_ms(300);
+ //Gradually increase speed (0% to 100%)
+ for (i=25; i<=225; i+=25)
+ {
+  OCR0 = i;
+  _delay_ms(300);
+ }
+ //Gradually decrease speed (100% to 0%)
+ for (i=255; i>=0; i-=25)
+ {
+  OCR0 = i;
+  _delay_ms(300);
+ }
+}
+
+int main()
+{
+ DDRB |= (1<< PB3) | (1<< PB4); //Set PB3(OC0) and PB4 as output
+ TCCR0 = 0XEB; //fast PWM Mode., Non-inverting mode, Prescaler 64- 11101011
+ 
+ while (1) 
+ {
+  PORTB &= ~(1<< PB4); // Set IN2 Low forward direction
+  motorControl();
+  _delay_ms(100);
+  
+  PORTB |= (1<<PB4);
+  motorControl();
+  _delay_ms(100);
+ }
+}

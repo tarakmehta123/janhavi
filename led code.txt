@@ -1,0 +1,39 @@
+LED    EQU P0      ; Assign LED to port 0
+SW     EQU P1.0    ; Assign Switch to pin 1.0
+RELAY  EQU P1.1    ; Assign Relay to pin 1.1
+BUZZ   EQU P1.2    ; Assign Buzzer to pin 1.2
+
+ORG 0000H          ; Start of program memory
+
+START:
+    JB SW, CASE1       ; If switch is pressed (HIGH), jump to CASE1
+    SJMP CASE2         ; Otherwise, jump to CASE2
+
+CASE1:
+    SETB RELAY         ; Turn ON relay
+    SETB BUZZ          ; Turn ON buzzer
+    MOV LED, #0FFH     ; LED pattern 11111111
+    ACALL DELAY
+    MOV LED, #00H      ; LED pattern 00000000
+    ACALL DELAY
+    SJMP START
+
+CASE2:
+    CLR RELAY          ; Turn OFF relay
+    CLR BUZZ           ; Turn OFF buzzer
+    MOV LED, #0AAH     ; LED pattern 10101010
+    ACALL DELAY
+    MOV LED, #55H      ; LED pattern 01010101
+    ACALL DELAY
+    SJMP START
+
+DELAY:
+    MOV R2, #18        ; Outer loop count
+L3: MOV R1, #100       ; Middle loop count
+L2: MOV R0, #250       ; Inner loop count
+L1: DJNZ R0, L1
+    DJNZ R1, L2
+    DJNZ R2, L3
+    RET
+
+END

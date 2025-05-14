@@ -1,0 +1,20 @@
+//Practical - 1C
+//Transfer a block of 10 bytes from external memory to internal memory
+//NAME:- MRUNALI BALASAHEB BHAGYAWANT
+//PRN NO.:- 22311520
+//ROLL NO.:- 213047
+//BATCH:- C2
+//DATE:- 
+
+MOV R0, #30H ; Internal memory start address
+MOV DPTR, #4000H ; External memory start address
+MOV R2, #10 ; Counter for 10 bytes
+
+LOOP:
+MOVX A, @DPTR ; Read byte from external memory
+MOV @R0, A ; Store byte in internal memory
+INC DPTR ; Increment external memory address
+INC R0 ; Increment internal memory address
+DJNZ R2, LOOP ; Decrement counter and loop if not zero
+
+END

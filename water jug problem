@@ -1,0 +1,37 @@
+from collections import deque
+
+def water_jug(a, b, target):
+    visited = set()
+    q = deque([(0, 0)])
+    path = []
+
+    while q:
+        x, y = q.popleft()
+        if (x, y) in visited:
+            continue
+        visited.add((x, y))
+        path.append((x, y))
+
+        if x == target or y == target:
+            if x == target and y != 0:
+                path.append((x, 0))
+            elif y == target and x != 0:
+                path.append((0, y))
+            for px, py in path:
+                print(f"({px}, {py})")
+            return
+
+        # Add next possible states
+        q.extend([
+            (a, y),     # Fill Jug1
+            (x, b),     # Fill Jug2
+            (0, y),     # Empty Jug1
+            (x, 0),     # Empty Jug2
+            (x - min(x, b - y), y + min(x, b - y)),  # Pour Jug1 -> Jug2
+            (x + min(y, a - x), y - min(y, a - x))   # Pour Jug2 -> Jug1
+        ])
+
+    print("Solution not possible")
+
+if _name_ == '_main_':
+    water_jug(4, 3, 2)

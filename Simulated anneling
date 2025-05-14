@@ -1,0 +1,47 @@
+import random
+import math
+
+# Define the objective function
+def objective_function(x):
+    return x**2  # Indentation fixed here
+
+# Simulated Annealing parameters
+initial_temperature = 100.0
+cooling_rate = 0.95
+min_temperature = 0.1
+iterations = 5
+
+# Initial solution
+x = random.uniform(-5, 5)
+current_energy = objective_function(x)
+best_x = x
+best_energy = current_energy
+
+# Simulated Annealing algorithm
+for iteration in range(iterations):
+    temperature = initial_temperature * math.pow(cooling_rate, iteration)
+    
+    # Generate a random neighbor within the bounds
+    neighbor_x = x + random.uniform(-1, 1)
+    neighbor_x = max(-5, min(5, neighbor_x))  # Ensure the neighbor is within bounds
+    neighbor_energy = objective_function(neighbor_x)
+    
+    # Calculate the energy (cost) change
+    energy_change = neighbor_energy - current_energy
+    
+    # Decide whether to move to the neighbor solution
+    if energy_change < 0 or random.random() < math.exp(-energy_change / temperature):
+        x = neighbor_x
+        current_energy = neighbor_energy
+    
+    # Update the best solution
+    if current_energy < best_energy:
+        best_x = x
+        best_energy = current_energy
+    
+    # Print progress
+    print(f"Iteration {iteration + 1}: x = {x:.4f}, Energy = {current_energy:.4f}, Temperature = {temperature:.4f}")
+
+# Print the optimal solution
+print("Optimal solution: x =", best_x)
+print("Minimum energy:", best_energy)
